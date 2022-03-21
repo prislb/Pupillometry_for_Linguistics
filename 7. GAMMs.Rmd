@@ -38,12 +38,11 @@ library(tidyverse)
 In this session, we will learn how to analyze *time series data*. to exemplify this, we will be analyzing pupillometry data.
 
 
-First of all, what *is* time series data? 
+First, what *is* time series data? 
 
-Time course refers to the evolution of a measurement *over time*. *Time series*
-refers to data that form a sequence ordered in time. Therefore, you do a time course experiment and you analyze time series. In our case, pupillometry is considered time series data because data on pupil dilation are collected continuously as the experiment unfolds such that we can obtain a dynamic, continuous measurement of pupil size over a period of time.
+Time course refers to the evolution of a measurement *over time*. *Time series* refers to data that form a sequence ordered in time. Therefore, you do a time course experiment and you analyze time series data. In our case, pupillometry is considered time series data because data on pupil dilation are collected continuously as the experiment unfolds such that we can obtain a dynamic, continuous measurement of pupil size over a period of time.
 
-The method used to analyze time series data that we will learn in today's session is called Generalized Linear Mixed Models (GAMMs). A GAMM can be seen as a regression model which is able to model *non-linear patterns* in the data.
+The method used to analyze time series data that we will learn is called *Generalized Linear Mixed Models* (GAMMs). A GAMM can be seen as a regression model which is able to model *non-linear patterns* in the data.
 
 For example, we below that a regression line is unable to capture the non-linear nature of the F2 trajectory.
 
