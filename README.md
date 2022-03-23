@@ -5,4 +5,6 @@
 
 <h1 align="center"> Pupillometry for Linguistics: The basics </h
 
-.
+Binder
+https://mybinder.org/v2/gh/prislb/Pupillometry_Basics.git/main
+  
