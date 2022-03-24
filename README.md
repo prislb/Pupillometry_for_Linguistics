@@ -6,6 +6,6 @@
 <h1 align="center"> Pupillometry for Linguistics: The basics </h
 
 Binder
-https://mybinder.org/v2/gh/prislb/Pupillometry_Basics.git/main
+https://mybinder.org/v2/gh/prislb/Pupillometry_Basics/main
   
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/prislb/Pupillometry_Basics.git/main??urlpath=rstudio)
