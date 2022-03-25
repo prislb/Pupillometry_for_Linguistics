@@ -4,7 +4,7 @@
 
 <div align="center"> <h1 align="center"> Pupillometry for Linguistics: The basics </h1> </div>
 
-## Work supported by the National Science Foundation Dissertation Improvement Award awarded to Priscila López-Beltrán  [![NSF-1928366](https://img.shields.io/badge/NSF-1928366-blue.svg)](https://www.nsf.gov/awardsearch/showAward?AWD_ID=1939903&HistoricalAwards=false) 
+## Work supported by the National Science Foundation Dissertation Improvement Award awarded to Priscila López-Beltrán  [![NSF-1939903](https://img.shields.io/badge/NSF-1939903-blue.svg)](https://www.nsf.gov/awardsearch/showAward?AWD_ID=1939903&HistoricalAwards=false) 
 
 ## Launch the Binder for this project in JupytherLab + RStudio Server [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/prislb/Pupillometry_Basics.git/main??urlpath=rstudio)
 
