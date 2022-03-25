@@ -22,6 +22,11 @@ While the design of a pupillometric experiment is beyond the scope of this repos
 
 While the design of a pupillometric experiment is beyond the scope of this repository, the notebooks here should provide a good first approach to analyzing pupillometric data in R. 
 
+<p align="center">
+  <img width="600" height="200" src="https://github.com/prislb/Pupillometry_Basics/blob/main/Rserver.png">
+</p>
+
+
 ### Materials in this repository
 1. Pupillometry for Linguistics HTML file.
 2. Pupillometry for Linguistics Rmd file.
