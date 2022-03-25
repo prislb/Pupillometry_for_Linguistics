@@ -31,21 +31,33 @@ While the design of a pupillometric experiment is beyond the scope of this repos
 *Note: The IPYNB file can be easily opened in JupyterLab and run using [IRkernel](https://irkernel.github.io/)*
 
 ## Overview of the notebooks
-These notebooks contain the basic principles needed to analyze pupillometic time-series data using *Generalized Linear Mixed Models* (GAMMs), which can be seen as regression models which are able to model *non-linear* patterns in data.  
+This notebook contain the basic principles needed to analyze pupillometic time-series data using *Generalized Linear Mixed Models* (GAMMs), which can be seen as regression models which are able to model *non-linear* patterns in data.  
 
-The data (which can be donwloaded in the data branch of this repository using Git's [LFS](https://github.com/prislb/Pupillometry_Basics/tree/data) consists of pupillary dilation data recorded millisecond by millisecond as participants listened to Linguistic stimuli in a controlled experimental setting. All data wer recorded using an [EyeLink Portable Duo](https://www.sr-research.com/eyelink-portable-duo/).
+The data (which can be donwloaded in the data branch of this repository using Git's [LFS](https://github.com/prislb/Pupillometry_Basics/tree/data) consists of pupillary dilation data recorded millisecond by millisecond as participants listened to Linguistic stimuli in a controlled experimental setting. All data were recorded using an [EyeLink Portable Duo](https://www.sr-research.com/eyelink-portable-duo/).
+
+Throughout the notebook, progressively more complex GAMM models will be created using the [mgcv](https://cran.r-project.org/web/packages/mgcv/index.html) R package. In addition, because visualization is crucial for significance testing in GAMMs, extensively explained code will be provided to visualize the data using the [itsadug](https://cran.r-project.org/web/packages/itsadug/index.html) R package. 
+
+Using these packages, the reader will learn to create fitted smooths and difference smooths as seen below:
 
 
 
-
-
+<div class="image123">
+    <div class="column">
+        <img src="https://github.com/prislb/Pupillometry_Basics/blob/main/fitted%20smooth.jpeg" height="200" width="400" />
+        <p>Fitted Smooths</p>
+    </div>
+    <div class=column">    
+        <img src="https://github.com/prislb/Pupillometry_Basics/blob/main/diff%20smooths.png"/ height="200" width="400"/>
+        <p>Difference Smooths</p>
+    </div>
+</div>
 
 
 
 ## Disclaimers
 - These materiales are based on work funded by a National Science Foundation [Dissertation Improvement Award Grant BCS-1939903](https://www.nsf.gov/awardsearch/showAward?AWD_ID=1939903&HistoricalAwards=false), awarded to Priscila López-Beltrán. 
-- These materiales are based on work funded by [NSF PIRE II: Translating cognitive and brain science in the laboratory and field to language learning environments](https://pire.la.psu.edu/about/pire-ii-translating-cognitive-and-brain-science-research-to-the-field-of-education-settings), awarded to the Center for Language Science at The Pennsilvania State University.
 
+- These materiales are based on work funded by [NSF PIRE II: Translating cognitive and brain science in the laboratory and field to language learning environments](https://pire.la.psu.edu/about/pire-ii-translating-cognitive-and-brain-science-research-to-the-field-of-education-settings), awarded to the Center for Language Science at The Pennsilvania State University.
 
 
 
