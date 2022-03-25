@@ -41,17 +41,16 @@ Using these packages, the reader will learn to create fitted smooths and differe
 
 
 
-<div class="image123">
-    <div class="column">
-        <img src="https://github.com/prislb/Pupillometry_Basics/blob/main/fitted%20smooth.jpeg" height="200" width="400" />
-        <p>Fitted Smooths</p>
+<div class="column">
+          <p>Fitted Smooths</p>
+        <img src="https://github.com/prislb/Pupillometry_Basics/blob/main/fitted%20smooth.jpeg" height="200" width="400"/>
     </div>
-    <div class=column">    
-        <img src="https://github.com/prislb/Pupillometry_Basics/blob/main/diff%20smooths.png"/ height="200" width="400"/>
+<div class="column">    
         <p>Difference Smooths</p>
+        <img src="https://github.com/prislb/Pupillometry_Basics/blob/main/diff%20smooths.png" height="200" width="400"/>
     </div>
 </div>
-
+                                                                                                                                                           In addition,                       
 
 
 ## Disclaimers
