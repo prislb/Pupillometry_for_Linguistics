@@ -50,8 +50,14 @@ Using these packages, the reader will learn to create fitted smooths and differe
         <img src="https://github.com/prislb/Pupillometry_Basics/blob/main/diff%20smooths.png" height="200" width="400"/>
     </div>
 </div>
-                                                                                                                                                           In addition,                       
 
+<br>
+
+Finally, the reader will also learn how to visualize interactions between continuous variables in GAMMs using contour plots:
+<div class="column">    
+        <img src="https://github.com/prislb/Pupillometry_Basics/blob/main/contour.png" height="300" width="400"/>
+    </div>
+</div>
 
 ## Disclaimers
 - These materiales are based on work funded by a National Science Foundation [Dissertation Improvement Award Grant BCS-1939903](https://www.nsf.gov/awardsearch/showAward?AWD_ID=1939903&HistoricalAwards=false), awarded to Priscila López-Beltrán. 
