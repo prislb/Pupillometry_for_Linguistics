@@ -9,10 +9,12 @@
 ## Launch the Binder for this project in JupytherLab + RStudio Server [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/prislb/Pupillometry_Basics.git/main??urlpath=rstudio)
 
 ## Materials
-1. 
+1. Pupillometry for Linguistics HTML file.
+2. Pupillometry for Linguistics Rmd file.
+3. Pupillometry for Linguistics ipynb file.
+4. CSV file with sampl pupillometric data.
 
-
-
+**Note: The ipynb file can be easily opened in JupyterLab and run using the [IRkernel](https://irkernel.github.io/)
 
 ### 1. What is pupillometry?
 Pupillometry is an online data collection technique employed in language science research. Psychological and neurological work over the past several decades has shown that the pupillary response is linked not only to changes in ambient luminance, but also to aspects processing.
