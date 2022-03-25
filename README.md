@@ -13,7 +13,7 @@
 **1. What is pupillometry?**
 
 
-Pupillometry is an online data collection technique employed in language science research. Psychological and neurological work over the past several decades has shown that the pupillary response is linked not only to changes in ambient luminance, but also to aspects processing.
+Pupillometry is an online data collection technique employed in language science research. Psychological and neurological work over the past several decades has shown that the pupillary response is linked not only to changes in ambient luminance, but also to aspects of language processing.
 
 While the design of a pupillometric experiment is beyond the scope of this repository, the various files here below should provide a good first approach to analyzing pupillometric data. 
 
@@ -72,20 +72,3 @@ Finally, the reader will also learn how to visualize interactions between contin
 - These materiales are based on work funded by a National Science Foundation [Dissertation Improvement Award Grant BCS-1939903](https://www.nsf.gov/awardsearch/showAward?AWD_ID=1939903&HistoricalAwards=false), awarded to Priscila López-Beltrán. 
 
 - These materiales are based on work funded by [NSF PIRE II: Translating cognitive and brain science in the laboratory and field to language learning environments](https://pire.la.psu.edu/about/pire-ii-translating-cognitive-and-brain-science-research-to-the-field-of-education-settings), awarded to the Center for Language Science at The Pennsilvania State University.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
