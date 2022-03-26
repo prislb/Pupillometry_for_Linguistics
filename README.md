@@ -31,8 +31,7 @@ While the design of a pupillometric experiment is beyond the scope of this repos
 1. Pupillometry for Linguistics HTML file.
 2. Pupillometry for Linguistics Rmd file.
 3. Pupillometry for Linguistics IPYNB file.
-4. CSV file with sample pupillometric data.
-
+4. CSV file with sample pupillometric data ([DOI](10.34740/kaggle/ds/2021248))
 
 ![](https://img.shields.io/badge/R-276DC3?style=for-the-badge&logo=r&logoColor=white)
 [![Made withJupyter](https://img.shields.io/badge/Made%20with-Jupyter-orange?style=for-the-badge&logo=Jupyter)](https://jupyter.org/try)
