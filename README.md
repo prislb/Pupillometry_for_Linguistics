@@ -11,7 +11,7 @@
 [![Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://www.kaggle.com/priscilalpezbeltrn/code)
 
 ## Launch the Binder for this project in JupytherLab + RStudio Server 
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/prislb/Pupillometry_Basics.git/main??urlpath=rstudio)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/prislb/Pupillometry_Basics/main??urlpath=rstudio)
 
 <p align="center">
   <img width="600" height="200" src="https://github.com/prislb/Pupillometry_Basics/blob/main/Rserver.png">
