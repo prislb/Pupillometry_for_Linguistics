@@ -6,39 +6,39 @@
 
 ## Work supported by the National Science Foundation Dissertation Improvement Award awarded to Priscila López-Beltrán  [![NSF-1939903](https://img.shields.io/badge/NSF-1939903-blue.svg)](https://www.nsf.gov/awardsearch/showAward?AWD_ID=1939903&HistoricalAwards=false) 
 
-## Launch the Binder for this project in JupytherLab + RStudio Server [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/prislb/Pupillometry_Basics.git/main??urlpath=rstudio)
+## Launch the Binder for this project in JupytherLab + RStudio Server 
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/prislb/Pupillometry_Basics.git/main??urlpath=rstudio)
 
-## Go tp Kaggle to view interactive versions of all 6 Notebooks associated with this repository [![Kaggle](https://www.kaggle.com/priscilalpezbeltrn/code)
-
-**1. What is pupillometry?**
-
-
-Pupillometry is an online data collection technique employed in language science research. Psychological and neurological work over the past several decades has shown that the pupillary response is linked not only to changes in ambient luminance, but also to aspects of language processing.
-
-While the design of a pupillometric experiment is beyond the scope of this repository, the various files here below should provide a good first approach to analyzing pupillometric data. 
-
-**2. What can you learn using the materials in this repository?**
-
-
-While the design of a pupillometric experiment is beyond the scope of this repository, the notebooks here should provide a good first approach to analyzing pupillometric data in R. 
+## Go t0 Kaggle to view interactive versions of all 6 Notebooks associated with this repository [![Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://www.kaggle.com/priscilalpezbeltrn/code)
 
 <p align="center">
   <img width="600" height="200" src="https://github.com/prislb/Pupillometry_Basics/blob/main/Rserver.png">
 </p>
 
+## **1. Materials in this repository**
+1. Pupillometry for Linguistics IPYNB files: This consists of 6 interactive notebooks covering diverse topics in pupillary data analysis. They can be     opened in Kaggle or downloaded an run in JupyterLab.
 
-### Materials in this repository
-1. Pupillometry for Linguistics HTML file.
-2. Pupillometry for Linguistics Rmd file.
-3. Pupillometry for Linguistics IPYNB file.
-4. CSV file with sample pupillometric data ([DOI](10.34740/kaggle/ds/2021248))
+2. Pupillometry for Linguistics Rmd file. This is a long file covering diverse topics in pupillary data analysis. This file can be run within an IRkernel in JupyterLab via RServer,
+
+3. A CSV file with sample pupillometric data ([DOI](10.34740/kaggle/ds/2021248))
 
 ![](https://img.shields.io/badge/R-276DC3?style=for-the-badge&logo=r&logoColor=white)
 [![Made withJupyter](https://img.shields.io/badge/Made%20with-Jupyter-orange?style=for-the-badge&logo=Jupyter)](https://jupyter.org/try)
 
 *Note: The IPYNB file can be easily opened in JupyterLab and run using [IRkernel](https://irkernel.github.io/)*
 
-## Overview of the notebooks
+
+## **2. What is pupillometry?**
+
+Pupillometry is an online data collection technique employed in language science research. Psychological and neurological work over the past several decades has shown that the pupillary response is linked not only to changes in ambient luminance, but also to aspects of language processing.
+
+While the design of a pupillometric experiment is beyond the scope of this repository, the various files here below should provide a good first approach to analyzing pupillometric data. 
+
+## **2. What can you learn using the materials in this repository?**
+
+While the design of a pupillometric experiment is beyond the scope of this repository, the notebooks here should provide a good first approach to analyzing pupillometric data in R. 
+
+## **3. Overview of the notebooks**
 This notebook contain the basic principles needed to analyze pupillometic time-series data using *Generalized Linear Mixed Models* (GAMMs), which can be seen as regression models which are able to model *non-linear* patterns in data.  
 
 The data (which can be donwloaded in the data branch of this repository using Git's [LFS](https://github.com/prislb/Pupillometry_Basics/tree/data) consists of pupillary dilation data recorded millisecond by millisecond as participants listened to Linguistic stimuli in a controlled experimental setting. All data were recorded using an [EyeLink Portable Duo](https://www.sr-research.com/eyelink-portable-duo/).
@@ -46,8 +46,6 @@ The data (which can be donwloaded in the data branch of this repository using Gi
 Throughout the notebook, progressively more complex GAMM models will be created using the [mgcv](https://cran.r-project.org/web/packages/mgcv/index.html) R package. In addition, because visualization is crucial for significance testing in GAMMs, extensively explained code will be provided to visualize the data using the [itsadug](https://cran.r-project.org/web/packages/itsadug/index.html) R package. 
 
 Using these packages, the reader will learn to create fitted smooths and difference smooths as seen below:
-
-
 
 <div class="column">
           <p>Fitted Smooths</p>
