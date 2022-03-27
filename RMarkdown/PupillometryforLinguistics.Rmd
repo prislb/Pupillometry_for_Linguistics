@@ -1,0 +1,341 @@
+---
+title: "Pupillometry for Linguistics"
+author: "Priscila López-Beltrán Forcada"
+date: "last updated on March 24th, 2022"
+output:
+  
+  pdf_document: default
+  word_document: default
+  html_document: default
+---
+```{r, include=FALSE}
+options(repos=c(CRAN="https://cran.gis-lab.info/"))
+```
+
+```{r, include=FALSE}
+install.packages("tidyverse")
+library(tidyverse)
+```
+## <div align="center"> <h1 align="center"> PUPILLOMETRY BASICS </h1> </div>
+## <div align="center"> <h1 align="center"> FOR LINGUISTICS </h1> </div>
+
+#### Work supported by the National Science Foundation [Dissertation Improvement Award No:1939903](https://www.nsf.gov/awardsearch/showAward?AWD_ID=1939903&HistoricalAwards=false) awarded to Priscila López-Beltrán.
+
+#### Special thanks to [NSF PIRE II: Translating cognitive and brain science in the laboratory and field to language learning environments](https://pire.la.psu.edu/), awarded to the Center for Language Science at The Pennsylvania State University.
+
+## **1. What is pupillometry?**
+
+#### Pupillometry is an online data collection technique employed in language science research. Psychological and neurological work over the past several decades has shown that the pupillary response is linked not only to changes in ambient luminance, but also to aspects of language processing.
+
+## **2. What can you learn using the materials in this notebook?**
+
+#### While the design of a pupillometric experiment is beyond the scope of this notebook, the materials here should provide a good first approach to analyzing pupillometric data in R.
+
+## <div align="center"> <h1 align="center"> PART I </h1> </div>
+
+In this notebook, we will learn how to analyze time series data. To exemplify this, we will be analyzing *pupillometry data*.
+
+First, what is time-series data?
+
+Time-course refers to the evolution of a measurement over time, while time-series refers to data that form a sequence ordered in time. Therefore, you do a time-course experiment and you analyze time series. In our case, pupillometry is considered time series data because data on pupil dilation are collected continuously as the experiment unfolds such that we can obtain a dynamic, continuous measurement of pupil size over a period of time.
+
+The method used to analyze time-series data that we will learn in this notebook is called *Generalized Linear Mixed Models* (GAMMs), which can be seen as regression models which are able to model non-linear patterns in the data. For example, below, we can easily see that a regression line is unable to capture the non-linear nature of the Formant 2 trajectory:
+
+```{r, echo=FALSE, out.width = '30%', fig.show='hold'}
+knitr::include_graphics(c("linear.jpeg", "nonlinear.jpeg"))
+```
+
+Let us refer to the slopes and intercepts of linear regression models as *parametric terms*. GAMMs differ from traditional linear regression models by allowing so-called *smooth terms* alongside parametric terms. Smooth terms are extremely flexible, that is how they can account for non-linear patterns.
+
+In addition, similar to linear mixed effects models, GAMMs incorporate random effects. These random effects can be random intercepts and random slopes. However, GAMMs also offer a third option: *random smooths*. Random smooths are similar to random slopes, but they are more flexible than the latter: while random slopes can only capture by-group variation in linear effects, random smooths can also deal with by-group variation in non-linear effects.
+
+```{r, echo=FALSE, out.width = '70%', fig.align="center"}
+knitr::include_graphics("random gamms.jpeg")
+```
+
+## Sample experiment: The Spanish subjunctive
+In Spanish, mood selection is primarily lexically conditioned, which entails that a number of verbs (governors) govern use of the subjunctive and indicative variants. A subset of these governors are non-variable, meaning that they select the subjunctive 100% pf the times (e.g., querer). This experiment investigates heritage speakers of Spanish sensitivity to this lexical constraint.
+
+Lexical Conditioning Experiment
+
+1. Condition Non-variable Subjunctive (NVS) consists of a non-variable governor (in bold) followed by a subordinate verb in the subjunctive (in italics).
+
+2. Condition Non-variable Indicative (NVI) is comprised of a non-variable governor (in bold) followed by a subordinate verb in the indicative (in italics).
+
+**Hypothesis**: Condition NVI will elicit higher pupillary dilation in participants if they are sensitive to the lexical constraint that non-variable governors select the subjunctive categorically.
+
+```{r, echo=FALSE, out.width = '70%', fig.align="center"}
+knitr::include_graphics("dissertation.jpeg")
+```
+
+## <div align="center"> <h1 align="center"> PART II: Creating a GAMMs model </h1> </div>
+
+## 1. Data, data, data
+
+Download and read-in the .csv file with the data. It can be downloaded directly from [Kaggle](https://www.kaggle.com/datasets/priscilalpezbeltrn/pupillometry-sample) (DOI: 10.34740/kaggle/ds/2021248).
+
+**Note:** consider the data file is quite heavy (83.82 MB) and it might take longer to download depending on your computer specs and internet connection.
+
+```{r, include=FALSE}
+data = read_csv('/Users/priscilalopez-beltran/Desktop/PROGRAMMING/Pupillometry/Jupyter Notebooks/data_pup_v2.csv')
+head(data)
+```
+We will also subset the datset to only include the conditions we are currently interested in (i.e, Non-variable Subjunctive-NVS, and Non-variable Indicative-NVI)
+
+```{r, include=FALSE}
+# Subset data frames:
+target_NV <- droplevels(data[(data$condition == "NVS") | (data$condition == "NVI"), ])
+```
+
+## 2. Call in the necessary package libraries
+The main packages we will be using are [mgcv](https://cran.r-project.org/web/packages/mgcv/index.html) 
+We will also use the [tidyverse](https://tidyverse.tidyverse.org/) due to its versatility for data wrangling.
+
+```{r, include=FALSE}
+library(mgcv)
+library(tidyverse)
+```
+
+## 3. Prep the data for modeling
+After we load in the the data and prepare our environment, we must make sure that *all* categorical variables are converted into factors, otherwise the model will not run. 
+
+```{r, include=FALSE}
+# Create factors
+data$participant <- as.factor(data$participant)
+data$session <- as.factor(data$session)
+data$condition <- as.factor(data$condition)
+data$item <- as.factor(data$item)
+data$regularity <- as.factor(data$regularity)
+```
+
+## 4. Creating our first model
+
+We will use the **bam()** function to create our model. 
+
+The code below shows what a basic model with placeholder variables would look like:
+
+model <- bam(dependent variable ~ independent variable **-> fixed effects structure** <br>
+                     + s(time, by = independent variable, k = 20) **-> smooth for time by independent variable** <br>
+                     + s(gaze_x, gaze_y) **-> smooth for gaze position** <br>
+                     + s(time, participant, bs = 'fs', m = 1, k = 10) **-> factor smooth for time by participant / random smooth** <br>
+                     + s(time, item, bs = 'fs', m = 1, k = 10) **-> factor smooth for time by item / random smooth** <br>
+                     , family = "scat" **-> t-distribution, as assumed in regression** <br>
+                     , data = target_NV **-> dataset** <br>
+                     , method = "fREML" **-> smoothing parameter estimation method must be fast REML** <br>
+                     , discrete = TRUE) **-> must be set to discrete**
+
+**Note:** For more details on model design see "Wieling, M. (2018). Analyzing dynamic phonetic data using generalized additive mixed modeling: a tutorial focusing on articulatory differences between L1 and L2 speakers of English. *Journal of Phonetics, 70*, 86-116. https://doi.org/10.1016/j.wocn.2018.03.002")   [Download](chrome-extension://efaidnbmnnnibpcajpcglclefindmkaj/viewer.html?pdfurl=https%3A%2F%2Fpure.rug.nl%2Fws%2Ffiles%2F63442271%2F1_s2.0_S0095447017301377_main.pdf)
+
+
+```{r, message=FALSE, warning=FALSE}
+# GAMMs tend to take a while to converge.
+# My comoputers specs are:
+# MacBook Pro (16-inch, 2019), Processor is 2.6 GHz 6-Core Intel Core i7, Memory is 16 GB 2667 MHz DDR4
+# Model 1 took approximately 5 monutes to converge
+
+model1 <- bam(corrected_pupil_size ~ condition 
+             + s(bin, by = condition, k = 20) # these data were binned into 20 ms time bins (bin = time)
+             + s(gaze_x, gaze_y) 
+             + s(bin, participant, bs = 'fs', m = 1, k = 10) 
+             + s(bin, item, bs = 'fs', m = 1, k = 10)
+             , family = "scat"
+             , data = target_NV
+             , method = "fREML"
+             , discrete = TRUE)
+
+summary(model1)
+```
+
+Let us dissect this scary output
+
+#### Parametric coefficients
+These are our fixed effects. As usual in regression, the intercept is the value of the dependent variable when all numerical predictors are equal to 0 and nominal variables are at their reference level. In  this case, the intercept represents the value of the DV for condition Non-Variable Indicative (NVI). We observe that for condition NVS, the pupillary dilation is -7.13 ties smaller than for NVI, which supports our hypothesis.
+
+#### Random smooths
+
+**1. edf**
+
+The edf value is indicative of the amount of non-linearity of the smooth. If the edf value for a certain smooth is (close to) 1, this means that the pattern is (close to) linear, while a value greater than 1 indicates that the pattern is more complex (i.e. non-linear).
+
+**2. Ref.df and F**
+
+The Ref.df value is the reference number of degrees of freedom used for hypothesis testing (on the basis of the associated F-value)
+
+**3. p-value**
+
+The p-value associated with each smooth indicates if the smooth is significantly different from 0. In this case, all variables are highly significantly different fro 0. If we focus on the first two lines of coefficients, which are those of interest to us, we see that the p-value for NVI is much higher than for NVS, indicating a higher difference from 0.
+
+#### Goodness-of-fit measures    
+
+The adjusted r2 represents the amount of variance explained by the regression and the deviance explained is a generalization of r2 and will be very similar to the actual r2. Bpth ofn them re pretty good in this model. Consider that with time series data, especially when we try to account for as much variability as possible, is is *very common* to see deviance explained values that are quite low. There is nothing inherently wrong with this, it is just a b-product of the type of data and models were are using.
+
+## <div align="center"> <h1 align="center"> PART III: Significance testing in GAMMs </h1> </div>
+
+## <div align="center"> <h1 align="center"> PART III: Significance testing in GAMMs </h1> </div>
+
+In Part II, we dissected the output of model1 in detail. However, significant p-values in the model don not really tell us much in GAMMs. P-values only indicate that both conditions are significantly different from zero and we can kind of infer which one is more different than the other. In order to actually assess significance, we will need to visualize the results.
+
+For visualization purposes, we will use the R package [itsadug](https://www.google.com/search?q=itsadug+package&rlz=1C5CHFA_enUS906US906&oq=its&aqs=chrome.0.69i59j69i57j0i67i131i433j46i10i512j0i512j0i433i512j69i60l2.1195j0j7&sourceid=chrome&ie=UTF-8).
+
+First, we visualize the fitted smooths for NVI and NVS. On the Y axis we have pupillary dilation and on the X axis we have time. We see that NVI elicited higher dilation that NVS starting around time bin 5 (~100 ms into the target period).
+
+```{r, include=FALSE}
+install.packages("itsadug")
+library(itsadug)
+```
+
+```{r, echo=FALSE, out.width = '50%'}
+plot_smooth(model1, view = "bin", plot_all = c("condition"), 
+            rm.ranef = TRUE, rug = FALSE, shade = FALSE, se = 0, lwd = 8,
+            main = "Pupillary Response Smooths based on Fitted Values \nNon-variable Governors",
+            xlab = "Time Bin (20ms per bin)",
+            ylab = "Corrected Pupil Size",
+            hide.label = T,
+            family = "serif")
+```
+
+Next, we visualize the difference between fitted smooths for NVI and NVS. The blocks of time marked between red dashed lines indicate when during the target period there was a significant difference between conditions. Because we are subtracting NVI from NVS and NVI elicited higer pupilary dilation, this difference shows as positive.
+
+```{r, echo=FALSE, out.width = '50%'}
+plot_diff(model1, view = "bin", comp = list(condition = c("NVI", "NVS")), rm.ranef = TRUE)
+```
+
+## Binary difference smooths
+
+Besides visualization, another possibility for significance testing is building a model with *binary difference smooths* which modek the difference between the fitted smooths for each condition. This method allows us to determine signiicance from the model output based on the p-value associated with the difference smooth.
+
+To fit a model with binary difference smooths, we first have to create a new, binary variable which is equal to 0 for one level of the nominal variable and 1 for the other level (i.e. a dummy coded variable). 
+
+Below, we create the variable *IsInd* ("is indicative") where the reference value 0 is subjunctive and the alternative value 1 is indicative.
+    
+```{r, echo=FALSE, out.width = '50%'}
+target_NV$IsInd <- (target_NV$condition == "NVI")*1
+target_NV$IsInd <- as.factor(target_NV$IsInd)
+```
+
+```{r, echo=FALSE, out.width = '50%'}
+model_bin <- bam(corrected_pupil_size ~
+                             + s(bin) # reference level = subjunctive
+                             + s(bin, by = IsInd) # difference smooth = indicative - subjunctive
+                             + s(gaze_x, gaze_y)
+                             + s(bin, participant, bs = 'fs')
+                             + s(bin, item, bs = 'fs')
+                             , family = "scat"
+                             , data = target_NV
+                             , method = "fREML"
+                             , discrete = TRUE)
+summary(model_bin)
+
+# This model will also take 5+ minutes to run
+```
+
+## <div align="center"> <h1 align="center"> PART IV: AR(1) autoregressive models </h1> </div>
+
+## Managing autocorrelation
+
+Autocorrelation in residuals is  a big problem in time-series data because data points are *not independent* of one another, this means that the relationship between variances changes in a systematic way, rather than being random. We often see autocorrelation plots that look like the one below, with very high lag (autocorrelation) values. Autocorrelation is especially dangerous because it inflates Type I mistakes. In order to address this problem, we must prepare prepare our data to include a *first order autoregressive structure or AR(1).* 
+
+```{r, echo=FALSE, out.width = '30%', fig.align="center"}
+knitr::include_graphics("lag.jpeg")
+```
+
+In order to address this problem, we must prepare prepare our data to include a *first order autoregressive structure or AR(1).* Remember, an AR1 model is a linear model that estimates influence of the immediately preceding measurement on the current measurement in a time-series.
+
+Given that we need the data to be ordered thoughout time in each trial, we will need to wrangle our dataset a little bit first. Then, we will calculate rho (ρ), the autocorrelation parameter, in order to include it in the model.
+
+```{r, message=FALSE, warning=FALSE}
+# Put everything in order.
+target_NV <- droplevels(target_NV[order(target_NV$bin, target_NV$participant, target_NV$session, target_NV$trial),]) 
+
+# Mark the start event of each trial.
+# target_NV <- start_event(target_NV, column = "bin", event = c("participant", "session", "trial"), order = FALSE) 
+target_NV$start.event <- NULL
+target_NV <- start_event(target_NV, column = "bin", event = c("participant", "session", "trial"), order = FALSE) # Mark the start event of each trial.
+
+#target_NV$start.event <- ifelse(target_NV$bin == -25, TRUE, FALSE)
+
+# Put everything BACK in order.
+target_NV <- droplevels(target_NV[order(target_NV$participant, target_NV$session, target_NV$trial, target_NV$bin),])
+
+# Once you have your first model without at AR1 included, you can use the function below to find the value of rho that works best for your AR1 model. This value can be tweaked +- .05
+rho <- start_value_rho(model1)
+print(rho)
+```
+
+We are are ready to create our GAMM with an AR(1) model included:
+
+```{r, message=FALSE, warning=FALSE}
+model_AR1 <- bam(corrected_pupil_size ~ condition
+             + s(bin, by = condition, k = 20) 
+             + s(gaze_x, gaze_y) 
+             + s(bin, participant, bs = 'fs', m = 1, k = 10) 
+             + s(bin, item, bs = 'fs', m = 1, k = 10) 
+             , family = "scat" 
+             , data = target_NV 
+             , method = "fREML" 
+             , discrete = TRUE
+             , AR.start = start.event # initialize AR(1) model
+             , rho = 0.99) # value of rho rounded up to the next decimal point
+```
+
+By virtue of having included an AR(1) model, we see that the autocorrelation in our NV_AR1 model is very low!
+
+Consider that there are other ways of improving the model fit, for example,  including a random effects structure that captures each time series. However, this method is oftentimes computationally not possible. In this ase, including an AR1 model may provide a good alternative solution
+
+```{r, echo=FALSE, out.width= "50%"}
+acf_resid(model_AR1, split_pred = c("participant", "item"))
+```
+
+Let's see if our results have changed. They haven't changed much but now we can have much more confidence in them.
+```{r}
+summary(NV_AR1)
+```
+
+## <div align="center"> <h1 align="center"> PART V: Interactions with continuous variables </h1> </div>
+
+To explore the effects of a continuous variable on a categorical variable in GAMMs, the former need to be modeled as an interaction with time. When fitting a model to examine an interaction with a continuous variable we need to use *tensor product smooths* (rather than binary difference smooths). The resulting non-linear interaction accounted for changes in pupil size caused by a categorical variabl on a continuous variable **over time.**
+
+```{r, message=FALSE, warning=FALSE}
+model_BPN <- bam(corrected_pupil_size ~ condition
+             + te(bin, BPN_Sp, by = condition)
+             + s(gaze_x, gaze_y)
+             + s(bin, participant, bs = 'fs', m = 1, k = 10)
+             + s(bin, item, bs = 'fs', m = 1, k = 10)
+             , family = "scat"
+             , data = target_NV
+             , method = "fREML"
+             , discrete = TRUE
+             , AR.start = start.event
+             , rho = 0.99)
+
+summary(model_BPN)
+```
+
+#### Visualization
+
+In the case of interactions with continuous variables, visualization is essential to understand the results because it is the only method used to determine significance. To visualize a two-dimensional pattern such as the effect of a categorical variabl on a continuous variable over time, **contour plots** based on the model’s fitted valued need to be plotted. 
+
+Here, the color bands represents the range of values of the dependent variable, in this case the difference in pupillary response between conditions (i.e., NIV minus NVS), the closer to red, the greater the difference. The highlighted areas in the plot indicate where there was a significant effect of the independent variable (y-axis) on the dependent variable, and the x-axis shows the time course of the effect. 
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+plot_diff2(model_BPN, view = c("bin", "BPN_Sp"),
+           comp= list(condition = c("NVI", "NVS")),
+           rm.ranef = T,
+           show.diff = T,
+           hide.label = T,
+           main = "Difference between NVI minus NVS",
+           xlab = "Time Bin (20ms per bin)",
+           ylab = "BPN Reaction Times (ms)")
+```
+
+## This concludes this series of notebooks on the basics of the analysis of pupillary data for experimental Linguistics.
+## If you found them useful, please do not hesitate to reach me via [LinkedIn](https://www.linkedin.com/in/prislb/) and check out my [web page](https://ry2y67bvrg.wixsite.com/prislb).
+
+## Resources
+
+### **Readings**
+  +  Sóskuthy, M. (2017). Generalised additive mixed models for dynamic analysis in linguistics: a practical introduction
+  + Wieling (2018) Analyzing dynamic phonetic data using generalized additive mixed modeling: A tutorial focusing on articulatory differences between L1 and L2 speakers of English
+  + Schmidtke (2018) Pupillometry linguistic research: an introduction and review for L2 researchers
+  + Sirois & Brisson (2015) Pupillometry
+  
